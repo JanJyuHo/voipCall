@@ -14,7 +14,7 @@ CXX           = cl
 DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DQT_QML_DEBUG -DQT_QUICK_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -nologo -Zc:wchar_t -FS -Zc:strictStrings -Zi -MDd -MTd -W3 -w44456 -w44457 -w44458 /Fddebug\pjsua2_demo.vc.pdb $(DEFINES)
 CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zi -MDd -MTd -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -EHsc /Fddebug\pjsua2_demo.vc.pdb $(DEFINES)
-INCPATH       = -I. -IE:\pjproject-2.9\pjlib\include -IE:\pjproject-2.9\pjlib-util\include -IE:\pjproject-2.9\pjnath\include -IE:\pjproject-2.9\pjmedia\include -IE:\pjproject-2.9\pjsip\include -IE:\pjproject-2.9\pjlib\include -IE:\pjproject-2.9\pjsip\include -IE:\pjproject-2.9\pjnath\include -IE:\pjproject-2.9\pjmedia\include -IE:\pjproject-2.9\pjlib-util\include -I..\..\include -I..\..\include\QtQuick -I..\..\include\QtWidgets -I..\..\include\QtGui -I..\..\include\QtANGLE -I..\..\include\QtQml -I..\..\include\QtNetwork -I..\..\include\QtCore -Idebug -I\include -I..\..\mkspecs\win32-msvc 
+INCPATH       = -I. -IE:\pjproject-2.9\pjlib\include -IE:\pjproject-2.9\pjlib-util\include -IE:\pjproject-2.9\pjnath\include -IE:\pjproject-2.9\pjmedia\include -IE:\pjproject-2.9\pjsip\include -I..\..\include -I..\..\include\QtQuick -I..\..\include\QtWidgets -I..\..\include\QtGui -I..\..\include\QtANGLE -I..\..\include\QtQml -I..\..\include\QtNetwork -I..\..\include\QtCore -Idebug -I\include -I..\..\mkspecs\win32-msvc 
 LINKER        = link
 LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /DEBUG /SUBSYSTEM:CONSOLE "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
 LIBS          = /LIBPATH:E:\pjproject-2.9\lib E:\pjproject-2.9\lib\avcodec.lib E:\pjproject-2.9\lib\avdevice.lib E:\pjproject-2.9\lib\avfilter.lib E:\pjproject-2.9\lib\avformat.lib E:\pjproject-2.9\lib\avutil.lib E:\pjproject-2.9\lib\pjproject-i386-Win32-vc14-Debug.lib E:\pjproject-2.9\lib\postproc.lib E:\pjproject-2.9\lib\SDL2.lib E:\pjproject-2.9\lib\swresample.lib E:\pjproject-2.9\lib\swscale.lib User32.lib OleAut32.lib Advapi32.lib /LIBPATH:E:\pjproject-2.9\pjsip\lib E:\pjproject-2.9\pjsip\lib\pjsua2-lib-i386-Win32-vc14-Debug.lib E:\pjproject-2.9\pjsip\lib\pjsua-lib-i386-Win32-vc14-Debug.lib E:\pjproject-2.9\pjsip\lib\pjsip-ua-i386-Win32-vc14-Debug.lib E:\pjproject-2.9\pjsip\lib\pjsip-simple-i386-Win32-vc14-Debug.lib E:\pjproject-2.9\pjsip\lib\pjsip-core-i386-Win32-vc14-Debug.lib /LIBPATH:E:\pjproject-2.9\pjlib\lib /LIBPATH:E:\pjproject-2.9\pjlib-util\lib /LIBPATH:E:\pjproject-2.9\pjnath\lib /LIBPATH:E:\pjproject-2.9\pjmedia\lib /LIBPATH:E:\pjproject-2.9\pjsip\lib /LIBPATH:E:\pjproject-2.9\third_party\lib /LIBPATH:D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Quickd.lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Widgetsd.lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Guid.lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Qmld.lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Networkd.lib D:\Qt\Qt5.11.2\5.11.2\msvc2015\lib\Qt5Cored.lib 
@@ -119,7 +119,7 @@ DESTDIR_TARGET = debug\pjsua2_demo.exe
 first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): E:\pjproject-2.9\lib\pjproject-i386-Win32-vc14-Debug.lib $(OBJECTS) 
+$(DESTDIR_TARGET):  $(OBJECTS) 
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
 debug\main.obj debug\voipaccount.obj debug\voipcall.obj debug\voipstart.obj debug\qrc_qml.obj debug\moc_voipaccount.obj debug\moc_voipstart.obj
 $(LIBS)
@@ -157,7 +157,16 @@ compiler_rcc_clean:
 	-$(DEL_FILE) debug\qrc_qml.cpp
 debug\qrc_qml.cpp: qml.qrc \
 		..\..\bin\rcc.exe \
-		main.qml
+		IncomingCall.qml \
+		AudioCalling.qml \
+		AudioCallConfirmed.qml \
+		main.qml \
+		StartingPage.qml \
+		image\Pickup.png \
+		image\mute.png \
+		image\Group.png \
+		image\volume.png \
+		image\Dog.jpg
 	D:\Qt\Qt5.11.2\5.11.2\msvc2015\bin\rcc.exe -name qml qml.qrc -o debug\qrc_qml.cpp
 
 compiler_moc_predefs_make_all: debug\moc_predefs.h
@@ -484,7 +493,7 @@ debug\moc_voipaccount.cpp: ..\..\include\QtCore\QObject \
 		voipaccount.h \
 		debug\moc_predefs.h \
 		..\..\bin\moc.exe
-	D:\Qt\Qt5.11.2\5.11.2\msvc2015\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo/debug/moc_predefs.h -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/mkspecs/win32-msvc -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjlib-util/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjsip/include -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjsip/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjlib-util/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQuick -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtWidgets -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtGui -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtANGLE -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQml -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtNetwork -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" voipaccount.h -o debug\moc_voipaccount.cpp
+	D:\Qt\Qt5.11.2\5.11.2\msvc2015\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo/debug/moc_predefs.h -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/mkspecs/win32-msvc -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjlib-util/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjsip/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQuick -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtWidgets -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtGui -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtANGLE -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQml -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtNetwork -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" voipaccount.h -o debug\moc_voipaccount.cpp
 
 debug\moc_voipstart.cpp: ..\..\include\QtCore\QObject \
 		..\..\include\QtCore\qobject.h \
@@ -819,7 +828,7 @@ debug\moc_voipstart.cpp: ..\..\include\QtCore\QObject \
 		voipstart.h \
 		debug\moc_predefs.h \
 		..\..\bin\moc.exe
-	D:\Qt\Qt5.11.2\5.11.2\msvc2015\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo/debug/moc_predefs.h -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/mkspecs/win32-msvc -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjlib-util/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjsip/include -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjsip/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjlib-util/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQuick -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtWidgets -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtGui -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtANGLE -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQml -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtNetwork -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" voipstart.h -o debug\moc_voipstart.cpp
+	D:\Qt\Qt5.11.2\5.11.2\msvc2015\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo/debug/moc_predefs.h -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/mkspecs/win32-msvc -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/qtproject/pjsua2_demo -IE:/pjproject-2.9/pjlib/include -IE:/pjproject-2.9/pjlib-util/include -IE:/pjproject-2.9/pjnath/include -IE:/pjproject-2.9/pjmedia/include -IE:/pjproject-2.9/pjsip/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQuick -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtWidgets -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtGui -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtANGLE -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtQml -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtNetwork -ID:/Qt/Qt5.11.2/5.11.2/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\INCLUDE" -I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\INCLUDE" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" voipstart.h -o debug\moc_voipstart.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:

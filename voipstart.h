@@ -20,6 +20,7 @@ public:
     Q_INVOKABLE void hangup();
     Q_INVOKABLE void answer();
     Q_INVOKABLE void reject();
+    Q_INVOKABLE void setVolume(int volume);
 
 signals:
     void incomingCall(const QString &info);

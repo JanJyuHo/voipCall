@@ -20,9 +20,9 @@ voipAccount::~voipAccount()
 void voipAccount::registerAsClient()
 {
     pj::AccountConfig acc_cfg;
-    acc_cfg.idUri = "sip:1000@192.168.56.129";
-    acc_cfg.regConfig.registrarUri = "sip:192.168.56.129";
-    acc_cfg.sipConfig.authCreds.push_back(pj::AuthCredInfo("digest","*", "1000" ,0,"1234"));
+    acc_cfg.idUri = "sip:1002@10.0.0.160";
+    acc_cfg.regConfig.registrarUri = "sip:10.0.0.160";
+    acc_cfg.sipConfig.authCreds.push_back(pj::AuthCredInfo("digest","*", "1002" ,0,"1234"));
     try {
         this->create(acc_cfg);
     } catch(...) {

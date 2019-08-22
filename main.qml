@@ -1,104 +1,76 @@
 ﻿import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
 
-Window {
+ApplicationWindow {
     visible: true
-    width: 640
-    height: 480
+    width: 375
+    height: 852
     title: qsTr("Hello World")
 
-    Rectangle {
-        anchors.fill: parent
-
-        Column {
+    header: ToolBar {
+        height: 40
+        RowLayout {
             anchors.fill: parent
-            Rectangle {
-                width: parent.width
-                height: 50
-                color: "blue"
-
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("initAccount")
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        voip.initAccount();
-                    }
-                }
+            ToolButton {
+                text: qsTr("<")
+                onClicked: stackView.pop()
             }
-
-            Rectangle {
-                width: parent.width
-                height: 50
-                color: "pink"
-
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("call1002")
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        voip.makeAudioCall();
-                    }
-                }
+            Label {
+                text: qsTr("Voip Call")
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
             }
+        }
+    }
 
-            Rectangle {
-                width: parent.width
-                height: 50
-                color: "yellow"
+    StackView {
+        id: stackView
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            top: header.bottom
+        }
+        initialItem: startingPage
+    }
 
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("answer")
-                }
+    Component {
+        id: startingPage
+        StartingPage {}
+    }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        voip.answer();
-                    }
-                }
-            }
-            Rectangle {
-                width: parent.width
-                height: 50
-                color: "green"
+    Component {
+        id: audioCallingPage
+        AudioCalling {}
+    }
 
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("hangup")
-                }
+    Component {
+        id: incomingCallPage
+        IncomingCall {}
+    }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        voip.hangup()
-                    }
-                }
-            }
-            Rectangle {
-                width: parent.width
-                height: 50
-                color: "purple"
+    Component {
+        id: audioCallConfirmedPage
+        AudioCallConfirmed {}
+    }
 
-                Text {
-                    anchors.centerIn: parent
-                    text: qsTr("reject")
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        voip.reject()
-                    }
-                }
-            }
+    function load_page(page) {
+        switch(page) {
+        case 'page 1':
+            stackView.push(startingPage);
+            break;
+        case 'audioCallingPage':
+            stackView.push(audioCallingPage);
+            break;
+        case 'incomingCallPage':
+            stackView.push(incomingCallPage);
+            break
+        case 'audioCallConfirmedPage':
+            stackView.push(audioCallConfirmedPage)
+            break
         }
     }
 }

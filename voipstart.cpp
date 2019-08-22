@@ -44,7 +44,7 @@ void voipStart::makeAudioCall()
     p.opt.audioCount = 1;
     p.opt.videoCount = 0;
     try {
-        call->makeCall("sip:1002@192.168.56.129", p);
+        call->makeCall("sip:1000@10.0.0.160", p);
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
     }
@@ -73,6 +73,11 @@ void voipStart::reject()
     callOpParam.statusCode = PJSIP_SC_DECLINE;
     call->hangup(callOpParam);
     call = nullptr;
+}
+
+void voipStart::setVolume(int volume)
+{
+    pjsua_conf_adjust_rx_level(0, volume);
 }
 
 void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)

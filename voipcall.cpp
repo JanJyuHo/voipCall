@@ -37,32 +37,37 @@ void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
     for (int i = 0; i < ci.media.size(); i++) {
         if (ci.media[i].type == PJMEDIA_TYPE_AUDIO && getMedia(i)) {
             // 语音通话
-            pj::AudioMedia aud_med;
-            pj::AudioMedia& play_dev_med =
-                    pj::Endpoint::instance().audDevManager().getPlaybackDevMedia();
+            pj::AudioMedia *aud_med = (pj::AudioMedia *)getMedia(i);
+            pj::AudDevManager &mgr = pj::Endpoint::instance().audDevManager();
 
-            try {
-                aud_med = getAudioMedia(i);
-            } catch (...) {
-                qDebug() << "Failed to get audio media" << endl;
-                return;
-            }
+            aud_med->startTransmit(mgr.getPlaybackDevMedia());
+            mgr.getCaptureDevMedia().startTransmit(*aud_med);
+//            pj::AudioMedia aud_med;
+//            pj::AudioMedia& play_dev_med =
+//                    pj::Endpoint::instance().audDevManager().getPlaybackDevMedia();
 
-            if (!wav_player) {
-                wav_player = new pj::AudioMediaPlayer();
-                try {
-                    wav_player->createPlayer("E:\pjproject-2.9\tests\pjsua\wavs\input.16.wav", 0);
-                } catch (...) {
-                    std::cout << "Failed opening wav file"  << std::endl;
-                    delete wav_player;
-                    wav_player = NULL;
-                }
-            }
+//            try {
+//                aud_med = getAudioMedia(i);
+//            } catch (...) {
+//                qDebug() << "Failed to get audio media" << endl;
+//                return;
+//            }
 
-            if (wav_player) {
-                wav_player->startTransmit(aud_med);
-            }
-            aud_med.startTransmit(play_dev_med);
+//            if (!wav_player) {
+//                wav_player = new pj::AudioMediaPlayer();
+//                try {
+//                    wav_player->createPlayer("E:\pjproject-2.9\tests\pjsua\wavs\input.16.wav", 0);
+//                } catch (...) {
+//                    std::cout << "Failed opening wav file"  << std::endl;
+//                    delete wav_player;
+//                    wav_player = NULL;
+//                }
+//            }
+
+//            if (wav_player) {
+//                wav_player->startTransmit(aud_med);
+//            }
+//            aud_med.startTransmit(play_dev_med);
         } else if (ci.media[i].type == PJMEDIA_TYPE_VIDEO && (ci.media[i].dir & PJMEDIA_DIR_DECODING)) {
 //            pjsua_vid_win_info wi;
 //            pjsua_vid_win_get_info(ci.media[i].videoIncomingWindowId, &wi);

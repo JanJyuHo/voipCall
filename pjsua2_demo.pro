@@ -21,7 +21,8 @@ HEADERS += \
 
 TARGET = pjsua2_demo
 
-win32:LIBS += -LE:\pjproject-2.9\lib \
+win32 {
+LIBS += -LE:\pjproject-2.9\lib \
             -lavcodec \
             -lavdevice \
             -lavfilter \
@@ -36,7 +37,7 @@ win32:LIBS += -LE:\pjproject-2.9\lib \
             -lOleAut32 \
             -lAdvapi32
 
-win32: LIBS += -LE:/pjproject-2.9/pjsip/lib/ \
+LIBS += -LE:/pjproject-2.9/pjsip/lib/ \
 -lpjsua2-lib-i386-Win32-vc14-Debug \
 -lpjsua-lib-i386-Win32-vc14-Debug \
 -lpjsip-ua-i386-Win32-vc14-Debug \
@@ -57,20 +58,29 @@ LIBS += -LE:/pjproject-2.9/pjlib/lib \
         -LE:/pjproject-2.9/third_party/lib
 
 DEPENDPATH += E:/pjproject-2.9/lib
+} else {
+  LIBS += $$system(make -f pj-pkgconfig.mak ldflags)
+  QMAKE_CXXFLAGS += $$system(make --silent -f pj-pkgconfig.mak cflags)
 
-win32:!win32-g++: PRE_TARGETDEPS += E:/pjproject-2.9/lib/pjproject-i386-Win32-vc14-Debug.lib
+  macx {
+    QMAKE_CXXFLAGS += -ObjC++
+  }
+}
 
-INCLUDEPATH += E:/pjproject-2.9/pjlib/include
-INCLUDEPATH +=E:/pjproject-2.9/pjsip/include
-INCLUDEPATH +=E:/pjproject-2.9/pjnath/include
-INCLUDEPATH +=E:/pjproject-2.9/pjmedia/include
-INCLUDEPATH +=E:/pjproject-2.9/pjlib-util/include
 
-DEPENDPATH += E:/pjproject-2.9/pjlib/include
-DEPENDPATH += E:/pjproject-2.9/pjsip/include
-DEPENDPATH += E:/pjproject-2.9/pjnath/include
-DEPENDPATH += E:/pjproject-2.9/pjmedia/include
-DEPENDPATH += E:/pjproject-2.9/pjlib-util/include
+#win32:!win32-g++: PRE_TARGETDEPS += E:/pjproject-2.9/lib/pjproject-i386-Win32-vc14-Debug.lib
+
+#INCLUDEPATH += E:/pjproject-2.9/pjlib/include
+#INCLUDEPATH +=E:/pjproject-2.9/pjsip/include
+#INCLUDEPATH +=E:/pjproject-2.9/pjnath/include
+#INCLUDEPATH +=E:/pjproject-2.9/pjmedia/include
+#INCLUDEPATH +=E:/pjproject-2.9/pjlib-util/include
+
+#DEPENDPATH += E:/pjproject-2.9/pjlib/include
+#DEPENDPATH += E:/pjproject-2.9/pjsip/include
+#DEPENDPATH += E:/pjproject-2.9/pjnath/include
+#DEPENDPATH += E:/pjproject-2.9/pjmedia/include
+#DEPENDPATH += E:/pjproject-2.9/pjlib-util/include
 
 QMAKE_CFLAGS_DEBUG += -MTd
 QMAKE_CXXFLAGS_DEBUG += -MTd
