@@ -17,11 +17,14 @@ public:
     virtual void onCallMediaState(pj::OnCallMediaStateParam &prm);
     virtual void onCallTransferRequest(pj::OnCallTransferRequestParam &prm);
     virtual void onCallReplaced(pj::OnCallReplacedParam &prm);
+    void setVolume(float volume);
 
 private:
     voipAccount *account;
     int callId;
     pj::AudioMediaPlayer *wav_player;
+    pj::AudioMedia *aud_med;
+    pj::AudDevManager &mgr = pj::Endpoint::instance().audDevManager();
 };
 
 }

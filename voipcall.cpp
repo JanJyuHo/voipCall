@@ -37,9 +37,7 @@ void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
     for (int i = 0; i < ci.media.size(); i++) {
         if (ci.media[i].type == PJMEDIA_TYPE_AUDIO && getMedia(i)) {
             // 语音通话
-            pj::AudioMedia *aud_med = (pj::AudioMedia *)getMedia(i);
-            pj::AudDevManager &mgr = pj::Endpoint::instance().audDevManager();
-
+            aud_med = (pj::AudioMedia *)getMedia(i);
             aud_med->startTransmit(mgr.getPlaybackDevMedia());
             mgr.getCaptureDevMedia().startTransmit(*aud_med);
 //            pj::AudioMedia aud_med;
@@ -117,6 +115,11 @@ void voipCall::onCallReplaced(pj::OnCallReplacedParam &prm)
 {
     /* Create new Call for call replace */
     prm.newCall = new voipCall(*account, prm.newCallId);
+}
+
+void voipCall::setVolume(float volume)
+{
+    aud_med->adjustRxLevel(volume);
 }
 
 }

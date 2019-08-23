@@ -10,6 +10,8 @@ namespace voip {
 
 class voipAccount;
 
+class voipCall;
+
 class voipStart : public QObject
 {
     Q_OBJECT
@@ -20,7 +22,7 @@ public:
     Q_INVOKABLE void hangup();
     Q_INVOKABLE void answer();
     Q_INVOKABLE void reject();
-    Q_INVOKABLE void setVolume(int volume);
+    Q_INVOKABLE void setVolume(float volume);
 
 signals:
     void incomingCall(const QString &info);

@@ -37,14 +37,14 @@ void voipStart::initAccount()
 
 void voipStart::makeAudioCall()
 {
-    pj::Call *call = new voipCall(*acc);
-    this->acc->calls.append(call);
+    pj::Call *newCall = new voipCall(*acc);
+    this->acc->calls.append(newCall);
 
     pj::CallOpParam p(true);
     p.opt.audioCount = 1;
     p.opt.videoCount = 0;
     try {
-        call->makeCall("sip:1000@10.0.0.160", p);
+        newCall->makeCall("sip:1000@10.0.0.160", p);
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
     }
@@ -58,26 +58,31 @@ void voipStart::hangup()
 
 void voipStart::answer()
 {
-    pj::Call *call = acc->calls[0];
+    pj::Call *newCall = acc->calls[0];
 
     pj::CallOpParam callOpParam;
     callOpParam.statusCode = PJSIP_SC_OK;
-    call->answer(callOpParam);
+    newCall->answer(callOpParam);
 }
 
 void voipStart::reject()
 {
-    pj::Call *call = acc->calls[0];
+    pj::Call *newCall = acc->calls[0];
 
     pj::CallOpParam callOpParam;
     callOpParam.statusCode = PJSIP_SC_DECLINE;
-    call->hangup(callOpParam);
-    call = nullptr;
+    newCall->hangup(callOpParam);
+    newCall = nullptr;
 }
 
-void voipStart::setVolume(int volume)
+void voipStart::setVolume(float volume)
 {
-    pjsua_conf_adjust_rx_level(0, volume);
+    if (acc->calls.count() != 0){
+        for (unsigned i = 0; i < acc->calls.count(); i++){
+            voipCall *newCall = (voipCall *)acc->calls[i];
+            newCall->setVolume(volume);
+        }
+    }
 }
 
 void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)

@@ -1,5 +1,7 @@
 ﻿import QtQuick 2.11
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.2
 
 Item {
     property int initTime: 0
@@ -150,8 +152,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    voip.hangup()
-                    stackView.pop()
+                    voip.setVolume(0)
                 }
             }
         }
@@ -181,7 +182,19 @@ Item {
             fillMode: Image.PreserveAspectFit
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    volumeBar.visible = true
+                }
                 onClicked: {
+                    if (volumeBar.visible) {
+                        volumeBar.visible = false
+                        return
+                    }
+
+                    if (!volumeBar.visible) {
+                        volumeBar.visible = true
+                    }
                 }
             }
         }
@@ -198,7 +211,31 @@ Item {
             color: "#FFFFFF"
         }
 
+        Slider {
+            z: 2
+            id: volumeBar
+            anchors.bottom: volume.top
+            anchors.bottomMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 72
+            width: 20
+            height: 100
+            orientation: Qt.Vertical
+            visible: false
+            minimumValue: 0
+            maximumValue: 1
+            value: 1 - 0.2
+            property bool hoverTrigger: true
+            onValueChanged: {
+                voip.setVolume(value)
+            }
+            style: SliderStyle {
+                handle: Rectangle {
+                    width: 13
+                    height: 13
+                    radius: width/2
+                }
+            }
+        }
     }
-
-
 }
