@@ -10,12 +10,14 @@ Item {
     function toTime(s) {
         var time
         if (s > -1) {
-            var min = Math.floor((s/60)%60)
+            var min = Math.floor(s/60)
             var sec = initTime % 60
             if (min < 10) {
                 time = "0"
+                time += min + ":"
+            } else {
+                time = min + ":"
             }
-            time += min + ":"
             if (sec < 10) {
                 time += "0"
             }
