@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>AudioCalling.qml</file>
-        <file>image/QQ图片20190322171359.jpg</file>
         <file>image/Group.png</file>
         <file>StartingPage.qml</file>
         <file>IncomingCall.qml</file>
@@ -11,5 +10,6 @@
         <file>AudioCallConfirmed.qml</file>
         <file>image/mute.png</file>
         <file>image/volume.png</file>
+        <file>image/Sheep.jpg</file>
     </qresource>
 </RCC>

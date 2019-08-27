@@ -37,7 +37,7 @@ Item {
         Image {
             id: background
             anchors.fill: parent
-            source: "qrc:/image/QQ图片20190322171359.jpg"
+            source: "qrc:/image/Sheep.jpg"
             fillMode: Image.PreserveAspectCrop
         }
         GaussianBlur {
@@ -63,7 +63,7 @@ Item {
             z: 2
             Image {
                 horizontalAlignment: Image.AlignHCenter
-                source: "qrc:/image/QQ图片20190322171359.jpg"
+                source: "qrc:/image/Sheep.jpg"
                 width: 120
                 height: 120
             }

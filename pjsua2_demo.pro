@@ -2,7 +2,9 @@ TEMPLATE = app
 
 QT += qml \
       quick \
-      widgets
+      widgets \
+      multimedia \
+      network \
 
 CONFIG += console c++11
 
@@ -59,10 +61,63 @@ LIBS += -LE:/pjproject-2.9/pjlib/lib \
 
 DEPENDPATH += E:/pjproject-2.9/lib
 } else {
-  LIBS += $$system(make -f pj-pkgconfig.mak ldflags)
-  QMAKE_CXXFLAGS += $$system(make --silent -f pj-pkgconfig.mak cflags)
-
   macx {
+    INCLUDEPATH += $$_PRO_FILE_PWD_/mac/pjproject/2.9/include \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjsip \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjmedia \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjmedia-audiodev \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjmedia-codec \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjmedia-videodev \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjnath \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjlib-util \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjsua-lib \
+#                   /Users/hpp/voipCall/pjproject/2.9/include/pjsua2 \
+                   $$_PRO_FILE_PWD_/mac/openssl/1.0.2s/include/openssl
+
+    LIBS += -L$$_PRO_FILE_PWD_/mac/pjproject/2.9/lib/ \
+            -lpjsua2-x86_64-apple-darwin17.7.0 \
+            -lstdc++ \
+            -lpjsua-x86_64-apple-darwin17.7.0 \
+            -lpjsip-ua-x86_64-apple-darwin17.7.0 \
+            -lpjsip-simple-x86_64-apple-darwin17.7.0 \
+            -lpjsip-x86_64-apple-darwin17.7.0 \
+            -lpjmedia-codec-x86_64-apple-darwin17.7.0 \
+            -lpjmedia-x86_64-apple-darwin17.7.0 \
+            -lpjmedia-videodev-x86_64-apple-darwin17.7.0 \
+            -lpjmedia-audiodev-x86_64-apple-darwin17.7.0 \
+            -lpjmedia-x86_64-apple-darwin17.7.0 \
+            -lpjnath-x86_64-apple-darwin17.7.0 \
+            -lpjlib-util-x86_64-apple-darwin17.7.0 \
+            -lsrtp-x86_64-apple-darwin17.7.0 \
+            -lresample-x86_64-apple-darwin17.7.0 \
+            -lgsmcodec-x86_64-apple-darwin17.7.0 \
+            -lspeex-x86_64-apple-darwin17.7.0 \
+            -lilbccodec-x86_64-apple-darwin17.7.0 \
+            -lg7221codec-x86_64-apple-darwin17.7.0 \
+            -lyuv-x86_64-apple-darwin17.7.0 \
+            -lwebrtc-x86_64-apple-darwin17.7.0 \
+            -lpj-x86_64-apple-darwin17.7.0 \
+            -lm \
+            -lpthread \
+            -framework CoreAudio \
+            -framework CoreServices \
+            -framework AudioUnit \
+            -framework AudioToolbox \
+            -framework Foundation \
+            -framework AppKit \
+            -framework AVFoundation \
+            -framework CoreGraphics \
+            -framework QuartzCore \
+            -framework CoreVideo \
+            -framework CoreMedia \
+            -framework VideoToolbox \
+            -framework Security \
+            /usr/lib/libz.dylib \
+            /usr/lib/libiconv.dylib \
+            /usr/lib/libbz2.dylib
+    LIBS += -L$$_PRO_FILE_PWD_/mac/openssl/1.0.2s/lib \
+            -lssl \
+            -lcrypto
     QMAKE_CXXFLAGS += -ObjC++
   }
 }
