@@ -22,13 +22,12 @@ Item {
 
             Text {
                 anchors.centerIn: parent
-                text: qsTr("initAccount")
+                text: qsTr("showCallingPage")
             }
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    voip.initAccount();
                     load_page('audioCallingPage')
                 }
             }

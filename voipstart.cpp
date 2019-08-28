@@ -29,6 +29,9 @@ voipStart::voipStart(QObject *parent) : QObject(parent), acc(new voipAccount(thi
 
     callState = "normal";
     connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
+
+    // init account
+    initAccount();
 }
 
 void voipStart::initAccount()
@@ -46,6 +49,7 @@ void voipStart::makeAudioCall()
     p.opt.videoCount = 0;
     try {
         newCall->makeCall("sip:1000@10.0.0.160", p);
+        qDebug() << "*** Making call" << endl;
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
     }
