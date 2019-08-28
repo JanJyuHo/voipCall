@@ -26,6 +26,15 @@ Item {
         return time
     }
 
+    Connections {
+        target: voip
+        onStateChanged: {
+            if (voip.state == "CONFIRMED") {
+                stackView.push('audioCallConfirmedPage')
+            }
+        }
+    }
+
     Component.onCompleted: {
         initTime = 0
         timer.start()

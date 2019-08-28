@@ -27,6 +27,7 @@ voipStart::voipStart(QObject *parent) : QObject(parent), acc(new voipAccount(thi
     ep.libStart();
     qDebug() << "PJSUA started!" << endl;
 
+    callState = "normal";
     connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
 }
 
@@ -47,6 +48,11 @@ void voipStart::makeAudioCall()
         newCall->makeCall("sip:1000@10.0.0.160", p);
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
+    }
+
+    pj::CallInfo ci = newCall->getInfo();
+    if (ci.state == PJSIP_INV_STATE_CONFIRMED) {
+        setState("CONFIRMED");
     }
 }
 
@@ -85,10 +91,22 @@ void voipStart::setVolume(float volume)
     }
 }
 
+QString voipStart::state() const
+{
+    return callState;
+}
+
+void voipStart::setState(const QString &state)
+{
+    callState = state;
+    emit stateChanged(callState);
+}
+
 void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)
 {
     // append to call active calls
     activeCallParams.append(iprm);
+    setState("INCOMING");
     qDebug() << "Receiving signals succeed!" << endl;
 }
 

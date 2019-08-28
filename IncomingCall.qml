@@ -96,6 +96,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     voip.answer()
+                    load_page('audioCallConfirmedPage')
                 }
             }
         }

@@ -4,6 +4,15 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.11
 
 Item {
+    Connections {
+        target: voip
+        onStateChanged: {
+            if (voip.state == "INCOMING") {
+                load_page('incomingCallPage')
+            }
+        }
+    }
+
     Column {
         anchors.fill: parent
         Rectangle {
@@ -39,6 +48,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     voip.makeAudioCall();
+                    load_page('audioCallingPage')
                 }
             }
         }
