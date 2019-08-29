@@ -33,6 +33,7 @@ signals:
 
 private slots:
     void onIncomingCall(pj::OnIncomingCallParam *iprm);
+    void onCallStateChanged(const QString &state);
 
 private:
     QString callState;

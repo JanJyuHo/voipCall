@@ -4,7 +4,10 @@
 
 namespace voip {
 
-voipStart::voipStart(QObject *parent) : QObject(parent), acc(new voipAccount(this))
+voipStart::voipStart(QObject *parent)
+    : QObject(parent),
+      acc(new voipAccount(this))
+
 {
     // Endpoint init
     try {
@@ -28,7 +31,9 @@ voipStart::voipStart(QObject *parent) : QObject(parent), acc(new voipAccount(thi
     qDebug() << "PJSUA started!" << endl;
 
     callState = "normal";
+    call = new voipCall(*acc);
     connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
+    connect(call, SIGNAL(callStateChanged(QString)), this, SLOT(onCallStateChanged(QString)));
 
     // init account
     initAccount();
@@ -88,7 +93,7 @@ void voipStart::reject()
 void voipStart::setVolume(float volume)
 {
     if (acc->calls.count() != 0){
-        for (unsigned i = 0; i < acc->calls.count(); i++){
+        for (unsigned i = 0; i < (acc->calls.count()); i++){
             voipCall *newCall = (voipCall *)acc->calls[i];
             newCall->setVolume(volume);
         }
@@ -113,6 +118,13 @@ void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)
     setState("INCOMING");
     qDebug() << "Receiving signals succeed!" << endl;
 }
+
+void voipStart::onCallStateChanged(const QString &callState)
+{
+    setState(callState);
+}
+
+
 
 
 }

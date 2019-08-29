@@ -29,8 +29,11 @@ Item {
     Connections {
         target: voip
         onStateChanged: {
-            if (voip.state == "CONFIRMED") {
-                stackView.push('audioCallConfirmedPage')
+            if (voip.state == "confrimed") {
+                load_page('audioCallConfirmedPage')
+            }
+            if (voip.state == "disconnected") {
+                load_page('page 1')
             }
         }
     }

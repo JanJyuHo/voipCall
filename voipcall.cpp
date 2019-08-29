@@ -3,8 +3,9 @@
 
 namespace voip {
 
-voipCall::voipCall(pj::Account &acc, int call_Id)
-    : pj::Call{acc, call_Id},
+voipCall::voipCall(pj::Account &acc, int call_Id, QObject *parent)
+    : QObject{parent},
+      pj::Call{acc, call_Id},
       account{static_cast<voipAccount *>(&acc)},
       callId{call_Id}
 {
@@ -23,9 +24,24 @@ void voipCall::onCallState(pj::OnCallStateParam &prm)
 
     pj::CallInfo ci = getInfo();
     std::cout << "*** Call: " << ci.stateText << std::endl;
-    if(ci.state == PJSIP_INV_STATE_DISCONNECTED) {
-        account -> removeCall(this);
+    //    if(ci.state == PJSIP_INV_STATE_DISCONNECTED) {
+    //        account -> removeCall(this);
+    //        delete this;
+    //    }
+    switch (ci.state) {
+    case PJSIP_INV_STATE_CALLING:
+        emit callStateChanged("calling");
+        break;
+    case PJSIP_INV_STATE_CONFIRMED:
+        emit callStateChanged("confrimed");
+        break;
+    case PJSIP_INV_STATE_DISCONNECTED:
+        emit callStateChanged("disconnected");
+        account->removeCall(this);
         delete this;
+        break;
+    default:
+        break;
     }
 }
 
@@ -40,37 +56,37 @@ void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
             aud_med = (pj::AudioMedia *)getMedia(i);
             aud_med->startTransmit(mgr.getPlaybackDevMedia());
             mgr.getCaptureDevMedia().startTransmit(*aud_med);
-//            pj::AudioMedia aud_med;
-//            pj::AudioMedia& play_dev_med =
-//                    pj::Endpoint::instance().audDevManager().getPlaybackDevMedia();
+            //            pj::AudioMedia aud_med;
+            //            pj::AudioMedia& play_dev_med =
+            //                    pj::Endpoint::instance().audDevManager().getPlaybackDevMedia();
 
-//            try {
-//                aud_med = getAudioMedia(i);
-//            } catch (...) {
-//                qDebug() << "Failed to get audio media" << endl;
-//                return;
-//            }
+            //            try {
+            //                aud_med = getAudioMedia(i);
+            //            } catch (...) {
+            //                qDebug() << "Failed to get audio media" << endl;
+            //                return;
+            //            }
 
-//            if (!wav_player) {
-//                wav_player = new pj::AudioMediaPlayer();
-//                try {
-//                    wav_player->createPlayer("E:\pjproject-2.9\tests\pjsua\wavs\input.16.wav", 0);
-//                } catch (...) {
-//                    std::cout << "Failed opening wav file"  << std::endl;
-//                    delete wav_player;
-//                    wav_player = NULL;
-//                }
-//            }
+            //            if (!wav_player) {
+            //                wav_player = new pj::AudioMediaPlayer();
+            //                try {
+            //                    wav_player->createPlayer("E:\pjproject-2.9\tests\pjsua\wavs\input.16.wav", 0);
+            //                } catch (...) {
+            //                    std::cout << "Failed opening wav file"  << std::endl;
+            //                    delete wav_player;
+            //                    wav_player = NULL;
+            //                }
+            //            }
 
-//            if (wav_player) {
-//                wav_player->startTransmit(aud_med);
-//            }
-//            aud_med.startTransmit(play_dev_med);
+            //            if (wav_player) {
+            //                wav_player->startTransmit(aud_med);
+            //            }
+            //            aud_med.startTransmit(play_dev_med);
         } else if (ci.media[i].type == PJMEDIA_TYPE_VIDEO && (ci.media[i].dir & PJMEDIA_DIR_DECODING)) {
-//            pjsua_vid_win_info wi;
-//            pjsua_vid_win_get_info(ci.media[i].videoIncomingWindowId, &wi);
+            //            pjsua_vid_win_info wi;
+            //            pjsua_vid_win_get_info(ci.media[i].videoIncomingWindowId, &wi);
 
-//            qDebug() << "found video window, start video...";
+            //            qDebug() << "found video window, start video...";
         }
     }
 
