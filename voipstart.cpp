@@ -31,9 +31,7 @@ voipStart::voipStart(QObject *parent)
     qDebug() << "PJSUA started!" << endl;
 
     callState = "normal";
-    call = new voipCall(*acc);
     connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
-    connect(call, SIGNAL(callStateChanged(QString)), this, SLOT(onCallStateChanged(QString)));
 
     // init account
     initAccount();
@@ -48,6 +46,7 @@ void voipStart::makeAudioCall()
 {
     pj::Call *newCall = new voipCall(*acc);
     this->acc->calls.append(newCall);
+    connect((voipCall*)newCall, &voipCall::callStateChanged,this,&voipStart::onCallStateChanged,Qt::UniqueConnection);
 
     pj::CallOpParam p(true);
     p.opt.audioCount = 1;
@@ -74,7 +73,7 @@ void voipStart::hangup()
 void voipStart::answer()
 {
     pj::Call *newCall = acc->calls[0];
-
+    connect((voipCall*)newCall, &voipCall::callStateChanged,this,&voipStart::onCallStateChanged,Qt::UniqueConnection);
     pj::CallOpParam callOpParam;
     callOpParam.statusCode = PJSIP_SC_OK;
     newCall->answer(callOpParam);

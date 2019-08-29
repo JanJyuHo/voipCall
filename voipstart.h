@@ -38,7 +38,6 @@ private slots:
 private:
     QString callState;
     voipAccount *acc;
-    voipCall *call;
     pj::Endpoint ep;
     QList<pj::OnIncomingCallParam*> activeCallParams;
 };

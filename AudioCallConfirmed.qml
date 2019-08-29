@@ -124,7 +124,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     voip.hangup()
-                    stackView.pop()
+                    load_page('page 1')
                 }
             }
         }
