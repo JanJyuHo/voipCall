@@ -1,13 +1,12 @@
-﻿#include "voipstart.h"
-#include "voipaccount.h"
-#include "voipcall.h"
+﻿#include "VoipManager.h"
+#include "VoipAccount.h"
+#include "VoipCall.h"
 
 namespace voip {
 
-voipStart::voipStart(QObject *parent)
+VoipManager::VoipManager(QObject *parent)
     : QObject(parent),
-      acc(new voipAccount(this))
-
+      acc(new VoipAccount(this))
 {
     // Endpoint init
     try {
@@ -37,16 +36,22 @@ voipStart::voipStart(QObject *parent)
     initAccount();
 }
 
-void voipStart::initAccount()
+VoipManager::~VoipManager()
+{
+    if(acc)
+        delete acc;
+}
+
+void VoipManager::initAccount()
 {
     acc->registerAsClient();
 }
 
-void voipStart::makeAudioCall()
+void VoipManager::makeAudioCall()
 {
-    pj::Call *newCall = new voipCall(*acc);
+    pj::Call *newCall = new VoipCall(*acc);
     this->acc->calls.append(newCall);
-    connect((voipCall*)newCall, &voipCall::callStateChanged,this,&voipStart::onCallStateChanged,Qt::UniqueConnection);
+    connect((VoipCall*)newCall, &VoipCall::callStateChanged,this,&VoipManager::onCallStateChanged,Qt::UniqueConnection);
 
     pj::CallOpParam p(true);
     p.opt.audioCount = 1;
@@ -64,22 +69,22 @@ void voipStart::makeAudioCall()
     }
 }
 
-void voipStart::hangup()
+void VoipManager::hangup()
 {
     ep.hangupAllCalls();
     qDebug() << "*** Hanging up the call" << endl;
 }
 
-void voipStart::answer()
+void VoipManager::answer()
 {
     pj::Call *newCall = acc->calls[0];
-    connect((voipCall*)newCall, &voipCall::callStateChanged,this,&voipStart::onCallStateChanged,Qt::UniqueConnection);
+    connect((VoipCall*)newCall, &VoipCall::callStateChanged,this,&VoipManager::onCallStateChanged,Qt::UniqueConnection);
     pj::CallOpParam callOpParam;
     callOpParam.statusCode = PJSIP_SC_OK;
     newCall->answer(callOpParam);
 }
 
-void voipStart::reject()
+void VoipManager::reject()
 {
     pj::Call *newCall = acc->calls[0];
 
@@ -89,28 +94,28 @@ void voipStart::reject()
     newCall = nullptr;
 }
 
-void voipStart::setVolume(float volume)
+void VoipManager::setVolume(float volume)
 {
     if (acc->calls.count() != 0){
         for (unsigned i = 0; i < (acc->calls.count()); i++){
-            voipCall *newCall = (voipCall *)acc->calls[i];
+            VoipCall *newCall = (VoipCall *)acc->calls[i];
             newCall->setVolume(volume);
         }
     }
 }
 
-QString voipStart::state() const
+QString VoipManager::state() const
 {
     return callState;
 }
 
-void voipStart::setState(const QString &state)
+void VoipManager::setState(const QString &state)
 {
     callState = state;
     emit stateChanged(callState);
 }
 
-void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)
+void VoipManager::onIncomingCall(pj::OnIncomingCallParam *iprm)
 {
     // append to call active calls
     activeCallParams.append(iprm);
@@ -118,12 +123,8 @@ void voipStart::onIncomingCall(pj::OnIncomingCallParam *iprm)
     qDebug() << "Receiving signals succeed!" << endl;
 }
 
-void voipStart::onCallStateChanged(const QString &callState)
+void VoipManager::onCallStateChanged(const QString &callState)
 {
     setState(callState);
 }
-
-
-
-
 }

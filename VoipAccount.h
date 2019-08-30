@@ -6,12 +6,12 @@
 #include <QDebug>
 
 namespace voip {
-class voipAccount : public QObject, public pj::Account
+class VoipAccount : public QObject, public pj::Account
 {
     Q_OBJECT
 public:
-    explicit voipAccount(QObject *parent = 0);
-    ~voipAccount();
+    explicit VoipAccount(QObject *parent = 0);
+    ~VoipAccount();
 
     void registerAsClient();
 

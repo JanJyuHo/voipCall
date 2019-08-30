@@ -1,24 +1,24 @@
-﻿#include "voipcall.h"
+﻿#include "VoipCall.h"
 #include <iostream>
 
 namespace voip {
 
-voipCall::voipCall(pj::Account &acc, int call_Id, QObject *parent)
+VoipCall::VoipCall(pj::Account &acc, int call_Id, QObject *parent)
     : QObject{parent},
       pj::Call{acc, call_Id},
-      account{static_cast<voipAccount *>(&acc)},
+      account{static_cast<VoipAccount *>(&acc)},
       callId{call_Id}
 {
     wav_player = NULL;
 }
 
-voipCall::~voipCall()
+VoipCall::~VoipCall()
 {
     if (wav_player)
         delete wav_player;
 }
 
-void voipCall::onCallState(pj::OnCallStateParam &prm)
+void VoipCall::onCallState(pj::OnCallStateParam &prm)
 {
     Q_UNUSED(prm);
 
@@ -45,7 +45,7 @@ void voipCall::onCallState(pj::OnCallStateParam &prm)
     }
 }
 
-void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
+void VoipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
 {
     Q_UNUSED(prm);
     pj::CallInfo ci = getInfo();
@@ -67,20 +67,20 @@ void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
             //                return;
             //            }
 
-            //            if (!wav_player) {
-            //                wav_player = new pj::AudioMediaPlayer();
-            //                try {
-            //                    wav_player->createPlayer("E:\pjproject-2.9\tests\pjsua\wavs\input.16.wav", 0);
-            //                } catch (...) {
-            //                    std::cout << "Failed opening wav file"  << std::endl;
-            //                    delete wav_player;
-            //                    wav_player = NULL;
-            //                }
-            //            }
+            if (!wav_player) {
+                wav_player = new pj::AudioMediaPlayer();
+                try {
+                    wav_player->createPlayer("qrc:/music/calling.wav", 0);
+                } catch (...) {
+                    std::cout << "Failed opening wav file"  << std::endl;
+                    delete wav_player;
+                    wav_player = NULL;
+                }
+            }
 
-            //            if (wav_player) {
-            //                wav_player->startTransmit(aud_med);
-            //            }
+            if (wav_player) {
+                wav_player->startTransmit(*aud_med);
+            }
             //            aud_med.startTransmit(play_dev_med);
         } else if (ci.media[i].type == PJMEDIA_TYPE_VIDEO && (ci.media[i].dir & PJMEDIA_DIR_DECODING)) {
             //            pjsua_vid_win_info wi;
@@ -121,19 +121,19 @@ void voipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
     //    aud_med.startTransmit(play_dev_med);
 }
 
-void voipCall::onCallTransferRequest(pj::OnCallTransferRequestParam &prm)
+void VoipCall::onCallTransferRequest(pj::OnCallTransferRequestParam &prm)
 {
     /* Create new Call for call transfer */
-    prm.newCall = new voipCall(*account);
+    prm.newCall = new VoipCall(*account);
 }
 
-void voipCall::onCallReplaced(pj::OnCallReplacedParam &prm)
+void VoipCall::onCallReplaced(pj::OnCallReplacedParam &prm)
 {
     /* Create new Call for call replace */
-    prm.newCall = new voipCall(*account, prm.newCallId);
+    prm.newCall = new VoipCall(*account, prm.newCallId);
 }
 
-void voipCall::setVolume(float volume)
+void VoipCall::setVolume(float volume)
 {
     aud_med->adjustRxLevel(volume);
 }

@@ -1,23 +1,23 @@
-﻿#include "voipaccount.h"
-#include "voipcall.h"
+﻿#include "VoipAccount.h"
+#include "VoipCall.h"
 
 #include <QDebug>
 
 namespace voip {
 
-voipAccount::voipAccount(QObject *parent)
+VoipAccount::VoipAccount(QObject *parent)
     : QObject{parent}
 {
 
 }
 
-voipAccount::~voipAccount()
+VoipAccount::~VoipAccount()
 {
     // Remove all calls
     qDeleteAll(this->calls);
 }
 
-void voipAccount::registerAsClient()
+void VoipAccount::registerAsClient()
 {
     pj::AccountConfig acc_cfg;
     acc_cfg.idUri = "sip:1002@10.0.0.160";
@@ -30,7 +30,7 @@ void voipAccount::registerAsClient()
     }
 }
 
-pj::Call *voipAccount::getCall(int callId)
+pj::Call *VoipAccount::getCall(int callId)
 {
     for (int i = 0; i < this->calls.length(); i++) {
         if (this->calls.at(i)->getId() == callId) {
@@ -40,12 +40,12 @@ pj::Call *voipAccount::getCall(int callId)
     return nullptr;
 }
 
-bool voipAccount::removeCall(pj::Call *call)
+bool VoipAccount::removeCall(pj::Call *call)
 {
     return this->calls.removeOne(call);
 }
 
-void voipAccount::onRegState(pj::OnRegStateParam &prm)
+void VoipAccount::onRegState(pj::OnRegStateParam &prm)
 {
     qDebug() << "\n==";
     pj::AccountInfo ai = getInfo();
@@ -56,9 +56,9 @@ void voipAccount::onRegState(pj::OnRegStateParam &prm)
     }
 }
 
-void voipAccount::onIncomingCall(pj::OnIncomingCallParam &iprm)
+void VoipAccount::onIncomingCall(pj::OnIncomingCallParam &iprm)
 {
-    pj::Call *call = new voipCall(*this, iprm.callId);
+    pj::Call *call = new VoipCall(*this, iprm.callId);
     this->calls.append(call);
 
     qDebug() << "\n==";

@@ -1,5 +1,5 @@
-﻿#ifndef VOIPSTART_H
-#define VOIPSTART_H
+﻿#ifndef VOIPMANAGER_H
+#define VOIPMANAGER_H
 
 #include <QObject>
 #include <QList>
@@ -8,16 +8,17 @@
 
 namespace voip {
 
-class voipAccount;
+class VoipAccount;
 
-class voipCall;
+class VoipCall;
 
-class voipStart : public QObject
+class VoipManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString state READ state WRITE setState NOTIFY stateChanged)
 public:
-    explicit voipStart(QObject *parent = 0);
+    explicit VoipManager(QObject *parent = 0);
+    ~VoipManager();
     Q_INVOKABLE void initAccount();
     Q_INVOKABLE void makeAudioCall();
     Q_INVOKABLE void hangup();
@@ -37,11 +38,11 @@ private slots:
 
 private:
     QString callState;
-    voipAccount *acc;
+    VoipAccount *acc;
     pj::Endpoint ep;
     QList<pj::OnIncomingCallParam*> activeCallParams;
 };
 
 }
 
-#endif // VOIPSTART_H
+#endif // VOIPMANAGER_H

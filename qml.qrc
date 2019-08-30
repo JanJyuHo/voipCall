@@ -11,5 +11,6 @@
         <file>image/mute.png</file>
         <file>image/volume.png</file>
         <file>image/Sheep.jpg</file>
+        <file>music/calling.wav</file>
     </qresource>
 </RCC>
