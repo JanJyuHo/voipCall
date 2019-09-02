@@ -33,6 +33,15 @@ Item {
         timer.start()
     }
 
+    Connections {
+        target: voip
+        onStateChanged: {
+            if (voip.state == "disconnected") {
+                load_page('page 1')
+            }
+        }
+    }
+
     Rectangle {
         width: 375
         height: 812

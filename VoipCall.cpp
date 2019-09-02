@@ -33,7 +33,7 @@ void VoipCall::onCallState(pj::OnCallStateParam &prm)
         emit callStateChanged("calling");
         break;
     case PJSIP_INV_STATE_CONFIRMED:
-        emit callStateChanged("confrimed");
+        emit callStateChanged("confirmed");
         break;
     case PJSIP_INV_STATE_DISCONNECTED:
         emit callStateChanged("disconnected");

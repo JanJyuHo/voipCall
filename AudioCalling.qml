@@ -29,7 +29,7 @@ Item {
     Connections {
         target: voip
         onStateChanged: {
-            if (voip.state == "confrimed") {
+            if (voip.state == "confirmed") {
                 load_page('audioCallConfirmedPage')
             }
             if (voip.state == "disconnected") {
