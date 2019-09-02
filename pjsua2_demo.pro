@@ -10,16 +10,16 @@ CONFIG += console c++11
 
 SOURCES += \
         main.cpp \
-    voipaccount.cpp \
-    voipcall.cpp \
-    voipstart.cpp
+    VoipAccount.cpp \
+    VoipCall.cpp \
+    VoipManager.cpp
 
 RESOURCES += qml.qrc
 
 HEADERS += \
-    voipaccount.h \
-    voipcall.h \
-    voipstart.h
+    VoipAccount.h \
+    VoipCall.h \
+    VoipManager.h
 
 TARGET = pjsua2_demo
 
@@ -115,6 +115,7 @@ DEPENDPATH += E:/pjproject-2.9/lib
             /usr/lib/libz.dylib \
             /usr/lib/libiconv.dylib \
             /usr/lib/libbz2.dylib
+
     LIBS += -L$$_PRO_FILE_PWD_/mac/openssl/1.0.2s/lib \
             -lssl \
             -lcrypto
