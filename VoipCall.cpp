@@ -135,7 +135,7 @@ void VoipCall::onCallReplaced(pj::OnCallReplacedParam &prm)
 
 void VoipCall::setVolume(float volume)
 {
-    aud_med->adjustRxLevel(volume);
+    mgr.getCaptureDevMedia().adjustRxLevel(volume);
 }
 
 }

@@ -8,6 +8,7 @@ Item {
     property var totalSeconds_ipt
     property var totalSeconds_sys
     property var trigger_ipt
+    property int volumeValue: 1
 
     function toTime(s) {
         var time
@@ -163,7 +164,13 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    voip.setVolume(0)
+                    if (volumeValue == 1) {
+                        voip.setVolume(0)
+                        volumeValue = 0
+                    } else if (volumeValue == 0) {
+                        voip.setVolume(1)
+                        volumeValue = 0
+                    }
                 }
             }
         }
