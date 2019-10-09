@@ -1,6 +1,7 @@
 ﻿#include "VoipManager.h"
 #include "VoipAccount.h"
 #include "VoipCall.h"
+#include <QTime>
 
 namespace voip {
 
@@ -21,9 +22,19 @@ VoipManager::VoipManager(QObject *parent)
     ep.libInit(ep_config);
 
     // Transport init
+    QTime time = QTime::currentTime();
+    qsrand(time.msec() + time.second() * 1000);
+    int n = qrand() % 10000;
+    qDebug() << n << endl;
+//    while (!getTcpPortState(5060)) {
+//        QTime time = QTime::currentTime();
+//        qsrand(time.msec() + time.second() * 1000);
+//        int n = qrand() % 10000;
+//        qDebug() << n << endl;
+//    }
     pj::TransportConfig trans_config;
     trans_config.port = 5060;
-    ep.transportCreate(PJSIP_TRANSPORT_UDP, trans_config);
+    ep.transportCreate(PJSIP_TRANSPORT_TCP, trans_config);
 
     // Start library
     ep.libStart();
@@ -57,7 +68,7 @@ void VoipManager::makeAudioCall()
     p.opt.audioCount = 1;
     p.opt.videoCount = 0;
     try {
-        newCall->makeCall("sip:1000@10.0.0.160", p);
+        newCall->makeCall("sip:138941@47.91.217.14;transport=tcp", p);
         qDebug() << "*** Making call" << endl;
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
@@ -113,6 +124,28 @@ void VoipManager::setState(const QString &state)
 {
     callState = state;
     emit stateChanged(callState);
+}
+
+bool VoipManager::getTcpPortState(int port)
+{
+    QTcpSocket *tcpSocket = new QTcpSocket(this);
+    tcpSocket->bind(port);
+//    SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+//    sockaddr_in addr;
+//    addr.sin_family = AF_INET;
+//    addr.sin_port = htons(port);
+//    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+//    bind(s,(LPSOCKADDR)&addr, sizeof(addr));
+    if (tcpSocket->error() == QAbstractSocket::AddressInUseError) {
+        return false;
+    } else {
+        tcpSocket->close();
+        return true;
+//        closesocket(s);
+//        bool bDontLinger = false;
+//        setsockopt(s, SOL_SOCKET, SO_DONTLINGER, (const char*)&bDontLinger, sizeof(bool));
+//        return true;
+    }
 }
 
 void VoipManager::onIncomingCall(pj::OnIncomingCallParam *iprm)

@@ -20,9 +20,15 @@ VoipAccount::~VoipAccount()
 void VoipAccount::registerAsClient()
 {
     pj::AccountConfig acc_cfg;
-    acc_cfg.idUri = "sip:1002@10.0.0.160";
-    acc_cfg.regConfig.registrarUri = "sip:10.0.0.160";
-    acc_cfg.sipConfig.authCreds.push_back(pj::AuthCredInfo("digest","*", "1002" ,0,"1234"));
+    acc_cfg.idUri = "sip:143945@47.91.217.14;transport=tcp";
+    acc_cfg.regConfig.registrarUri = "sip:47.91.217.14;transport=tcp";
+    acc_cfg.sipConfig.authCreds.push_back(pj::AuthCredInfo("digest","*", "143945" ,0,"30373aac438a42c4"));
+    acc_cfg.natConfig.iceEnabled = true;
+    acc_cfg.natConfig.turnEnabled = true;
+    acc_cfg.natConfig.turnConnType = PJ_TURN_TP_TCP;
+    acc_cfg.natConfig.turnServer = "47.91.217.14:3478";
+    acc_cfg.natConfig.turnUserName = "enigma";
+    acc_cfg.natConfig.turnPassword = "123a2487fa989ebf";
     try {
         this->create(acc_cfg);
     } catch(...) {

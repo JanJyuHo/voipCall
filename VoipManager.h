@@ -5,6 +5,7 @@
 #include <QList>
 #include <pjsua2.hpp>
 #include <QDebug>
+#include <QTcpSocket>
 
 namespace voip {
 
@@ -27,6 +28,7 @@ public:
     Q_INVOKABLE void setVolume(float volume);
     QString state() const;
     void setState(const QString &state);
+    bool getTcpPortState(int port);
 
 signals:
     void incomingCall(const QString &info);
