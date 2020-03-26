@@ -8,9 +8,13 @@
 #pragma comment(lib,"wsock32.lib")
 #pragma comment(lib,"ole32.lib")
 #pragma comment(lib,"dsound.lib")
+#pragma comment(lib,"Iphlpapi.lib")
 
 int main(int argc, char *argv[])
 {
+    // macos 10.15 use 'thread' render loop, app will be crash
+    qputenv("QSG_RENDER_LOOP", "basic");
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);

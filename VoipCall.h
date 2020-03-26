@@ -27,7 +27,6 @@ signals:
 private:
     VoipAccount *account;
     int callId;
-    pj::AudioMediaPlayer *wav_player;
     pj::AudioMedia *aud_med;
     pj::AudDevManager &mgr = pj::Endpoint::instance().audDevManager();
 };

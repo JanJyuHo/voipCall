@@ -3,6 +3,10 @@
 #include "VoipCall.h"
 #include <QTime>
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 namespace voip {
 
 VoipManager::VoipManager(QObject *parent)
@@ -17,31 +21,21 @@ VoipManager::VoipManager(QObject *parent)
         Q_UNUSED(err);
     }
     pj::EpConfig ep_config;
-    ep_config.logConfig.level = 5;
+    ep_config.logConfig.level = 1;
     ep_config.uaConfig.maxCalls = 1;
     ep.libInit(ep_config);
 
     // Transport init
-    QTime time = QTime::currentTime();
-    qsrand(time.msec() + time.second() * 1000);
-    int n = qrand() % 10000;
-    qDebug() << n << endl;
-//    while (!getTcpPortState(5060)) {
-//        QTime time = QTime::currentTime();
-//        qsrand(time.msec() + time.second() * 1000);
-//        int n = qrand() % 10000;
-//        qDebug() << n << endl;
-//    }
     pj::TransportConfig trans_config;
-    trans_config.port = 5060;
-    ep.transportCreate(PJSIP_TRANSPORT_TCP, trans_config);
+    trans_config.port = 8976;
+    ep.transportCreate(PJSIP_TRANSPORT_UDP, trans_config);
 
     // Start library
     ep.libStart();
     qDebug() << "PJSUA started!" << endl;
 
     callState = "normal";
-    connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
+//    connect(acc, SIGNAL(incomingCall(pj::OnIncomingCallParam*)), this, SLOT(onIncomingCall(pj::OnIncomingCallParam*)));
 
     // init account
     initAccount();
@@ -68,7 +62,7 @@ void VoipManager::makeAudioCall()
     p.opt.audioCount = 1;
     p.opt.videoCount = 0;
     try {
-        newCall->makeCall("sip:138941@47.91.217.14;transport=tcp", p);
+        newCall->makeCall("sip:1001@192.168.80.128;transport=udp", p);
         qDebug() << "*** Making call" << endl;
     } catch(...) {
         qDebug() << "*** Making call failed" << endl;
@@ -122,29 +116,11 @@ QString VoipManager::state() const
 
 void VoipManager::setState(const QString &state)
 {
-    callState = state;
-    emit stateChanged(callState);
-}
-
-bool VoipManager::getTcpPortState(int port)
-{
-    QTcpSocket *tcpSocket = new QTcpSocket(this);
-    tcpSocket->bind(port);
-//    SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-//    sockaddr_in addr;
-//    addr.sin_family = AF_INET;
-//    addr.sin_port = htons(port);
-//    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-//    bind(s,(LPSOCKADDR)&addr, sizeof(addr));
-    if (tcpSocket->error() == QAbstractSocket::AddressInUseError) {
-        return false;
+    if (callState == "incoming" && state == "incoming") {
+        return;
     } else {
-        tcpSocket->close();
-        return true;
-//        closesocket(s);
-//        bool bDontLinger = false;
-//        setsockopt(s, SOL_SOCKET, SO_DONTLINGER, (const char*)&bDontLinger, sizeof(bool));
-//        return true;
+        callState = state;
+        emit stateChanged(callState);
     }
 }
 

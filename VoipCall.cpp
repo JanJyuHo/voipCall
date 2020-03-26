@@ -9,13 +9,10 @@ VoipCall::VoipCall(pj::Account &acc, int call_Id, QObject *parent)
       account{static_cast<VoipAccount *>(&acc)},
       callId{call_Id}
 {
-    wav_player = NULL;
 }
 
 VoipCall::~VoipCall()
 {
-    if (wav_player)
-        delete wav_player;
 }
 
 void VoipCall::onCallState(pj::OnCallStateParam &prm)
@@ -66,21 +63,6 @@ void VoipCall::onCallMediaState(pj::OnCallMediaStateParam &prm)
             //                qDebug() << "Failed to get audio media" << endl;
             //                return;
             //            }
-
-            if (!wav_player) {
-                wav_player = new pj::AudioMediaPlayer();
-                try {
-                    wav_player->createPlayer("qrc:/music/calling.wav", 0);
-                } catch (...) {
-                    std::cout << "Failed opening wav file"  << std::endl;
-                    delete wav_player;
-                    wav_player = NULL;
-                }
-            }
-
-            if (wav_player) {
-                wav_player->startTransmit(*aud_med);
-            }
             //            aud_med.startTransmit(play_dev_med);
         } else if (ci.media[i].type == PJMEDIA_TYPE_VIDEO && (ci.media[i].dir & PJMEDIA_DIR_DECODING)) {
             //            pjsua_vid_win_info wi;

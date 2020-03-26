@@ -4,7 +4,7 @@ QT += qml \
       quick \
       widgets \
       multimedia \
-      network \
+      network
 
 CONFIG += console c++11
 
@@ -138,5 +138,5 @@ DEPENDPATH += E:/pjproject-2.9/lib
 #DEPENDPATH += E:/pjproject-2.9/pjmedia/include
 #DEPENDPATH += E:/pjproject-2.9/pjlib-util/include
 
-QMAKE_CFLAGS_DEBUG += -MTd
-QMAKE_CXXFLAGS_DEBUG += -MTd
+#QMAKE_CFLAGS_DEBUG += -MTd
+#QMAKE_CXXFLAGS_DEBUG += -MTd
